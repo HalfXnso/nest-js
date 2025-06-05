@@ -16,11 +16,11 @@ import { ListadoTarea } from './components/listado_tareas/listado_tareas';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres', // Tipo de base de datos
-      host: '127.0.0.1', // Dirección del servidor (local)
-      port: 5432, // Puerto de PostgreSQL (por defecto)
+      host: 'mainline.proxy.rlwy.net', // Dirección del servidor (local)
+      port: 10916, // Puerto de PostgreSQL (por defecto)
       username: 'postgres', // 👈 Reemplaza con tu usuario de PostgreSQL
-      password: 'Sistemas123@', // 👈 Reemplaza con tu contraseña
-      database: 'back', // 👈 Nombre de la base de datos
+      password: 'tqtOJnepVBhUaIQREZaoiAWODyiGCdxd', // 👈 Reemplaza con tu contraseña
+      database: 'railway', // 👈 Nombre de la base de datos
       entities: [Evento, Usuario, Tarea, PerfilUsuario, ListadoTarea], // Las entidades que usará TypeORM
       synchronize: true, // Crea automáticamente las tablas (solo en desarrollo)
     }),
