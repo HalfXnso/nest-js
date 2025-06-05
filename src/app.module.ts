@@ -15,14 +15,20 @@ import { ListadoTarea } from './components/listado_tareas/listado_tareas';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'postgres', // Tipo de base de datos
-      host: 'mainline.proxy.rlwy.net', // Dirección del servidor (local)
-      port: 10916, // Puerto de PostgreSQL (por defecto)
-      username: 'postgres', // 👈 Reemplaza con tu usuario de PostgreSQL
-      password: 'tqtOJnepVBhUaIQREZaoiAWODyiGCdxd', // 👈 Reemplaza con tu contraseña
-      database: 'railway', // 👈 Nombre de la base de datos
-      entities: [Evento, Usuario, Tarea, PerfilUsuario, ListadoTarea], // Las entidades que usará TypeORM
-      synchronize: true, // Crea automáticamente las tablas (solo en desarrollo)
+      type: 'postgres',
+      host: 'dpg-d10vg06mcj7s73c3ss0g-a.frankfurt-postgres.render.com', // Host de Render
+      port: 5432, // Puerto estándar de PostgreSQL
+      username: 'dbackend_user', // Usuario de Render
+      password: 'ImS4LqJU4pRDBLsqQfvGpZIY5GdRJr2V', // Contraseña de Render
+      database: 'dbackend', // Nombre de la base de datos en Render
+      entities: [Evento, Usuario, Tarea, PerfilUsuario, ListadoTarea],
+      synchronize: true, // ¡Cuidado! Solo en desarrollo
+      ssl: true, // Necesario para conexiones con Render
+      extra: {
+        ssl: {
+          rejectUnauthorized: false // Necesario para Render
+        }
+      }
     }),
     EventoModule,
     UsuarioModule,
