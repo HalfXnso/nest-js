@@ -1,14 +1,18 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core'; // Ensure @nestjs/core is installed
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const server = app.getHttpAdapter().getInstance();
-  const routes = server._router?.stack
-    .filter((layer: any) => layer.route)
-    .map((layer: any) => layer.route.path); // Obtiene las rutas registradas
-  console.log('Rutas registradas:', routes);
-  await app.listen(3000); // Asegúrate de que el puerto sea el correcto
+  const app = await NestFactory.create(AppModule); // Ensure AppModule is correctly defined and imported
 
+  // Configura CORS antes de iniciar el servidor
+  app.enableCors({
+    origin: 'http://localhost:4200', // Cambia esto por la URL de tu frontend
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+
+  await app.listen(3000);
+  console.log('Application is running on: http://localhost:3000');
 }
-bootstrap();
+
+void bootstrap();

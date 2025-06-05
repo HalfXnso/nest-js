@@ -1,4 +1,7 @@
+import { Usuario } from '../usuario/usuario.entity';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { ManyToMany, JoinTable } from 'typeorm';
+
 
 @Entity()
 export class Evento {
@@ -6,13 +9,11 @@ export class Evento {
   id: number;
 
   @Column()
-  nombre_evento: string;
+  nombreEvento: string;
 
   @Column()
   descripcion: string;
 
-  @Column()
-  estado: string;
 
   @Column({ type: 'timestamp' })
   fechaInicio: Date;
@@ -20,6 +21,8 @@ export class Evento {
   @Column({ type: 'timestamp' })
   fechaFin: Date;
 
-  @Column({ default: false })
-  seguido: boolean;
+  @ManyToMany(() => Usuario, (usuario) => usuario.eventos, { cascade: true })
+  @JoinTable()
+  usuarios: Usuario[];
+  
 }
