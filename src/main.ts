@@ -6,7 +6,7 @@ async function bootstrap() {
 
   // Configura CORS antes de iniciar el servidor
   app.enableCors({
-    origin: 'http://localhost:4200', // Cambia esto por la URL de tu frontend
+    origin: 'https://tfg-front-pi.vercel.app', // Cambia esto por la URL de tu frontend
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
