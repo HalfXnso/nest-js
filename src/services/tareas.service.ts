@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Tarea } from 'src/components/tareas/tarea.entity';
-import { Repository } from 'typeorm';
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 
 @Injectable()
 
@@ -38,4 +38,15 @@ export class TareasService {
     await this.tareasRepository.delete(id);
   }
 
+  async findByRangoFechas(startDate: Date, endDate: Date): Promise<Tarea[]> {
+    return this.tareasRepository.find({
+      where: [
+        {
+          fechaInicio: LessThanOrEqual(endDate),
+          fechaFin: MoreThanOrEqual(startDate),
+        },
+      ],
+      relations: ['usuarios'],
+    });
+  }
 }

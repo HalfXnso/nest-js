@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { TareasService } from 'src/services/tareas.service';
 import { Tarea } from './tarea.entity';
 
@@ -33,5 +33,16 @@ export class TareasController {
   @Delete(':id')
   delete(@Param('id') id: number): Promise<void> {
     return this.tareasService.remove(id);
+  }
+
+
+  @Get('rango-fechas')
+  getByRangoFechas(
+    @Query('fechaInicio') fechaInicio: string,
+    @Query('fechaFin') fechaFin: string,
+  ): Promise<Tarea[]> {
+    const startDate = new Date(fechaInicio.replace(' ', 'T'));
+    const endDate = new Date(fechaFin.replace(' ', 'T'));
+    return this.tareasService.findByRangoFechas(startDate, endDate);
   }
 }
