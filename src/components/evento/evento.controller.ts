@@ -84,32 +84,38 @@ export class EventoController {
   }
 
 
-  @Post('asistente/dialogflow')
+@Post('asistente/dialogflow')
 async dialogflowWebhook(@Body() body: any): Promise<any> {
-  const query = body.queryResult.queryText?.toLowerCase();
-  if (query.includes('eventos') && query.includes('hoy')) {
-    const hoyInicio = new Date();
-    hoyInicio.setHours(0, 0, 0, 0);
-    const hoyFin = new Date();
-    hoyFin.setHours(23, 59, 59, 999);
+  try {
+    const query = body.queryResult?.queryText?.toLowerCase() || '';
+    
+    if (query.includes('eventos') && query.includes('hoy')) {
+      const hoyInicio = new Date();
+      hoyInicio.setHours(0, 0, 0, 0);
+      const hoyFin = new Date();
+      hoyFin.setHours(23, 59, 59, 999);
 
-    const eventosHoy = await this.eventoService.findByRangoFechas(hoyInicio, hoyFin);
+      const eventosHoy = await this.eventoService.findByRangoFechas(hoyInicio, hoyFin);
+      const respuesta = eventosHoy.length === 0 
+        ? 'No tienes eventos para hoy.' 
+        : `Tienes ${eventosHoy.length} ${eventosHoy.length === 1 ? 'evento' : 'eventos'} hoy: ${
+        eventosHoy.length === 1 
+          ? eventosHoy[0].nombreEvento 
+          : eventosHoy.slice(0, -1).map(e => e.nombreEvento).join(', ') + ' y ' + eventosHoy[eventosHoy.length - 1].nombreEvento
+          }`;
 
-    if (eventosHoy.length === 0) {
-      return {
-        fulfillmentText: 'No tienes eventos para hoy.'
-      };
-    } else {
-      const lista = eventosHoy.map(e => e.nombreEvento).join(', ');
-      return {
-        fulfillmentText: `Tienes ${eventosHoy.length} eventos hoy: ${lista}`
-      };
+      return { respuesta };  // Asegúrate de devolver un objeto con la propiedad "respuesta"
     }
-  }
 
-  return {
-    fulfillmentText: 'Lo siento, no entendí tu solicitud.'
-  };
+    if (query.normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes('que piensas')) {
+      return { respuesta: 'Yo la verdad, te suspendería por pringao.' };
+    }
+
+    return { respuesta: 'Lo siento, no entendí tu solicitud.' };
+  } catch (error) {
+    console.error('Error en dialogflowWebhook:', error);
+    return { respuesta: 'Hubo un error al procesar tu solicitud.' };
+  }
 }
 
 }
