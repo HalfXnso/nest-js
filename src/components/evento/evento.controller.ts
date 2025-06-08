@@ -83,7 +83,7 @@ export class EventoController {
       }
     }
     if (texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes('que piensas')) {
-      return { respuesta: 'Lo siento, no tengo una opinión sobre eso.' };
+      return { respuesta: 'Yo la verdad, te suspendería por pringao.' };
     }
     return { respuesta: 'No entendí el comando, intenta de nuevo.' };
   }
